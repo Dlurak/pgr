@@ -1,6 +1,6 @@
 mod generate;
 
-use clap::Parser;
+use clap::{Parser, ArgAction};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -21,26 +21,26 @@ struct Args {
     #[clap(
         short = 'L',
         long,
-        default_value_t = true,
-        help = "Should lowercase letters be used",
+        action = ArgAction::SetTrue,
+        help = "Should lowercase letters be excluded",
         aliases = &["lower"]
     )]
     lowercase: bool,
     #[clap(
         short,
         long,
-        default_value_t = true,
-        help = "Should uppercase letteres be used",
+        action = ArgAction::SetTrue,
+        help = "Should uppercase letteres be excluded",
         aliases = &["upper"]
     )]
     uppercase: bool,
-    #[clap(short, long, default_value_t = true, help = "Should digits be used")]
+    #[clap(short, long, action = ArgAction::SetTrue, help = "Should digits be excluded")]
     digit: bool,
     #[clap(
         short,
         long,
-        default_value_t = true,
-        help = "Should special charachters be used",
+        action = ArgAction::SetTrue,
+        help = "Should special charachters be excluded",
         aliases = &["spec"]
     )]
     special: bool,
@@ -57,9 +57,9 @@ fn main() {
     ];
     let char_sets = char_sets.iter().filter_map(|(flag, charset)| {
         if *flag {
-            Some(charset.get_string())
-        } else {
             None
+        } else {
+            Some(charset.get_string())
         }
     });
     let char_sets = char_sets.collect::<Vec<_>>();
